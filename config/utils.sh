@@ -229,9 +229,9 @@ box() {
   set +u 
   local COLUMNS=$COLUMNS
   : ${COLUMNS:=80}
-  contents="$(fold -s -w "$COLUMNS" <<< "$*")"
-  length=$(length "$(awk 'NR==1' <<< "$contents")" )
-  awk -v l=$length 'BEGIN{ printf "┌";for(;i++<l+2;){printf "─"}print "┐"}{printf "│ %*s │\n", l, $0 }END{  printf "└";for(i=0;i++<l+2;){printf "─"}print "┘" }' <<< "$contents"
+  contents="$(fold -s -w "$(( COLUMNS - 4 ))" <<< "$*")"
+  length=$(awk -F '' 'NF>a{a=NF}END{print a}' <<< "$contents") # length of longest line
+  awk -v l=$length 'BEGIN{ printf "┌";for(;i++<l+2;){printf "─"}print "┐"}{printf "│ %*-s │\n", l, $0 }END{  printf "└";for(i=0;i++<l+2;){printf "─"}print "┘" }' <<< "$contents"
 
   set $old_env
 }
@@ -244,9 +244,7 @@ showfilecontents() {
     return 1 
   fi
   : ${COLUMNS:=80} # 80 if not defined
-  using COLUMNS $((COLUMNS - 4))
-    box "$(squeezepath "$filename")"
-  gnisu
+  box "$(squeezepath "$filename")"
 
   # Prepend a 🮌 to each line in the file
   sed "s/^/🮌 /g" "$filename"
