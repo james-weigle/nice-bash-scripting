@@ -10,7 +10,7 @@ set +u
 # Parse arguments
 parse_args "new_file [--sbatch]" "$@"
 if ! $sbatch; then
-  read -r -p "$(bd "Enter a usage string") [default: \"\"]: " usage_string
+  read -r -p "$(bd "Enter a usage string") [example: \"arg1 [--flag] [--kw-arg=<val>] arg2\"] [default: \"\"]: " usage_string
   : ${usage_string:=""}
 fi
 
