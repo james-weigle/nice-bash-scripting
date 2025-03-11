@@ -286,6 +286,7 @@ parse_args() {
 
   local env_options="$-"
   set +u # allow unbound
+  set -f # do not allow file globbing right now
   
   local _fname 
   if [[ ${FUNCNAME[1]} == "main" ]]; then
